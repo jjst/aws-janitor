@@ -32,7 +32,7 @@ class AwsJanitorStack(Stack):
             entry="lambda/janitor",
             runtime=_lambda.Runtime.PYTHON_3_12,
             index="handler.py",
-            handler="handler",
+            handler="lambda_handler",
             function_name=f"aws-janitor-function-{env}",
             environment={"ENV": env},
             log_retention=logs.RetentionDays.SIX_MONTHS,
