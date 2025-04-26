@@ -6,6 +6,7 @@ from aws_cdk import (
     aws_iam as iam,
     aws_events as events,
     aws_events_targets as targets,
+    aws_logs as logs,
 )
 from aws_cdk.aws_lambda_python_alpha import PythonFunction
 from constructs import Construct
@@ -34,7 +35,7 @@ class AwsJanitorStack(Stack):
             handler="handler",
             function_name=f"aws-janitor-function-{env}",
             environment={"ENV": env},
-            log_retention=_lambda.RetentionDays.SIX_MONTHS,
+            log_retention=logs.RetentionDays.SIX_MONTHS,
         )
 
         # === IAM permissions ===
