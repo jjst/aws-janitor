@@ -36,6 +36,8 @@ class AwsJanitorStack(Stack):
             function_name=f"aws-janitor-function-{env}",
             environment={"ENV": env},
             log_retention=logs.RetentionDays.SIX_MONTHS,
+            timeout=Duration.seconds(60),
+
         )
 
         # === IAM permissions ===
