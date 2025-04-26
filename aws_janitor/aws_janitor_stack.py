@@ -37,11 +37,10 @@ class AwsJanitorStack(Stack):
             environment={"ENV": env},
             log_retention=logs.RetentionDays.SIX_MONTHS,
             timeout=Duration.seconds(60),
-
         )
 
         # === IAM permissions ===
-        actions = ["cloudformation:DescribeStacks"]
+        actions = ["cloudformation:ListStacks", "cloudformation:DescribeStacks"]
         if env == "live":
             actions.append("cloudformation:DeleteStack")
 
