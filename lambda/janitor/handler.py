@@ -1,6 +1,6 @@
 import boto3
 from pytimeparse.timeparse import timeparse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 cf = boto3.client('cloudformation')
 
@@ -11,7 +11,8 @@ def parse_ttl(ttl_str):
     return timedelta(seconds=seconds)
 
 def lambda_handler(event, context):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
+
     stacks = cf.describe_stacks()['Stacks']
     for stack in stacks:
         tags = {tag['Key']: tag['Value'] for tag in stack.get('Tags', [])}
