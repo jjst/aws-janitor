@@ -4,7 +4,6 @@
 
 It uses stack tags (`TTL`) to determine when a stack should be deleted, ensuring that test resources don't linger and accumulate unnecessary costs.
 
----
 
 ## How It Works
 
@@ -20,7 +19,6 @@ The janitor's behavior differs depending on the environment:
 
 Environment is controlled by the `ENV` environment variable (`test` or `live`).
 
----
 
 ## Setup Instructions
 
@@ -49,7 +47,6 @@ export ENV=test   # or ENV=live
 cdk deploy
 ```
 
----
 
 ## Useful Commands
 
@@ -59,7 +56,6 @@ cdk deploy
 - `cdk diff` — compare your stack against deployed version
 - `cdk destroy` — destroy the deployed stack
 
----
 
 ## Project Structure
 
@@ -68,7 +64,6 @@ cdk deploy
 - `lambda/janitor/handler.py` — Janitor Lambda code
 - `requirements.txt` — Python dependencies
 
----
 
 ## Notes
 
@@ -76,7 +71,4 @@ cdk deploy
 - The janitor is designed to fail safely in test environments.
 - Stack tagging is automatic via a shared `BaseStack` from `cdk-tools`.
 
----
-
-Enjoy clean AWS accounts and predictable cloud costs! ✨
 
