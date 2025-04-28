@@ -1,58 +1,82 @@
+# aws-janitor
 
-# Welcome to your CDK Python project!
+**aws-janitor** is a small AWS CDK project that deploys a scheduled Lambda function to automatically clean up old test stacks in your AWS account.
 
-This is a blank project for CDK development with Python.
+It uses stack tags (`TTL`) to determine when a stack should be deleted, ensuring that test resources don't linger and accumulate unnecessary costs.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+---
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+## How It Works
 
-To manually create a virtualenv on MacOS and Linux:
+- Each CloudFormation stack can be tagged with a `TTL` (e.g., `3 days`).
+- The janitor Lambda runs every hour (EventBridge rule).
+- It finds stacks whose creation time + TTL has expired.
+- Expired stacks are automatically deleted.
 
-```
-$ python3 -m venv .venv
-```
+The janitor's behavior differs depending on the environment:
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+- **test**: Can only *read* stacks (no deletions allowed, safe mode).
+- **live**: Can *read and delete* expired stacks.
 
-```
-$ source .venv/bin/activate
-```
+Environment is controlled by the `ENV` environment variable (`test` or `live`).
 
-If you are a Windows platform, you would activate the virtualenv like this:
+---
 
-```
-% .venv\Scripts\activate.bat
-```
+## Setup Instructions
 
-Once the virtualenv is activated, you can install the required dependencies.
+1. **Set up your virtual environment**
 
-```
-$ pip install -r requirements.txt
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
+2. **Install dependencies**
 
+```bash
+pip install -r requirements.txt
 ```
-$ cdk synth
+
+3. **Set the deployment environment**
+
+```bash
+export ENV=test   # or ENV=live
 ```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+4. **Deploy the stack**
 
-## Useful commands
+```bash
+cdk deploy
+```
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+---
 
-Enjoy!
+## Useful Commands
+
+- `cdk ls` — list all stacks
+- `cdk synth` — output the synthesized CloudFormation template
+- `cdk deploy` — deploy your stack to AWS
+- `cdk diff` — compare your stack against deployed version
+- `cdk destroy` — destroy the deployed stack
+
+---
+
+## Project Structure
+
+- `app.py` — CDK application entry point
+- `aws_janitor/` — CDK stack definition
+- `lambda/janitor/handler.py` — Janitor Lambda code
+- `requirements.txt` — Python dependencies
+
+---
+
+## Notes
+
+- Lambda log retention is set to **6 months** to minimize costs.
+- The janitor is designed to fail safely in test environments.
+- Stack tagging is automatic via a shared `BaseStack` from `cdk-tools`.
+
+---
+
+Enjoy clean AWS accounts and predictable cloud costs! ✨
+
