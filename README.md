@@ -4,21 +4,22 @@
 
 It uses stack tags (`TTL`) to determine when a stack should be deleted, ensuring that test resources don't linger and accumulate unnecessary costs.
 
+---
 
-## How It Works
+## How to Use
 
-- Each CloudFormation stack can be tagged with a `TTL` (e.g., `3 days`).
-- The janitor Lambda runs every hour (EventBridge rule).
-- It finds stacks whose creation time + TTL has expired.
-- Expired stacks are automatically deleted.
+1. **Tag your CloudFormation stacks**
+   - Add a `TTL` tag to your stack.
+   - The value should be human-readable, e.g., `12 hours`, `3 days`, or `30 minutes`.
 
-The janitor's behavior differs depending on the environment:
+2. **Automatic Cleanup**
+   - The janitor Lambda will regularly scan stacks.
+   - If a stack's creation time + TTL is in the past, it will be automatically deleted.
 
-- **test**: Can only *read* stacks (no deletions allowed, safe mode).
-- **live**: Can *read and delete* expired stacks.
+3. **Helpful Tooling**
+   - See [aws-cdk-tools](https://github.com/jjst/aws-cdk-tools) for code to automatically add a TTL to your CDK stacks.
 
-Environment is controlled by the `ENV` environment variable (`test` or `live`).
-
+---
 
 ## Setup Instructions
 
@@ -47,28 +48,33 @@ export ENV=test   # or ENV=live
 cdk deploy
 ```
 
+---
 
 ## Useful Commands
 
-- `cdk ls` — list all stacks
-- `cdk synth` — output the synthesized CloudFormation template
-- `cdk deploy` — deploy your stack to AWS
-- `cdk diff` — compare your stack against deployed version
-- `cdk destroy` — destroy the deployed stack
+- `cdk ls` &mdash; list all stacks
+- `cdk synth` &mdash; output the synthesized CloudFormation template
+- `cdk deploy` &mdash; deploy your stack to AWS
+- `cdk diff` &mdash; compare your stack against deployed version
+- `cdk destroy` &mdash; destroy the deployed stack
 
+---
 
 ## Project Structure
 
-- `app.py` — CDK application entry point
-- `aws_janitor/` — CDK stack definition
-- `lambda/janitor/handler.py` — Janitor Lambda code
-- `requirements.txt` — Python dependencies
+- `app.py` &mdash; CDK application entry point
+- `aws_janitor/` &mdash; CDK stack definition
+- `lambda/janitor/handler.py` &mdash; Janitor Lambda code
+- `requirements.txt` &mdash; Python dependencies
 
+---
 
 ## Notes
-
 - Lambda log retention is set to **6 months** to minimize costs.
 - The janitor is designed to fail safely in test environments.
-- Stack tagging is automatic via a shared `BaseStack` from `cdk-tools`.
+- Stack tagging is automatic via a shared `BaseStack` from [aws-cdk-tools](https://github.com/jjst/aws-cdk-tools).
 
+---
+
+Enjoy clean AWS accounts and predictable cloud costs! ✨
 
