@@ -4,7 +4,6 @@
 
 It uses stack tags (`TTL`) to determine when a stack should be deleted, ensuring that test resources don't linger and accumulate unnecessary costs.
 
----
 
 ## How to Use
 
@@ -19,7 +18,6 @@ It uses stack tags (`TTL`) to determine when a stack should be deleted, ensuring
 3. **Helpful Tooling**
    - See [aws-cdk-tools](https://github.com/jjst/aws-cdk-tools) for code to automatically add a TTL to your CDK stacks.
 
----
 
 ## Setup Instructions
 
@@ -48,7 +46,6 @@ export ENV=test   # or ENV=live
 cdk deploy
 ```
 
----
 
 ## Useful Commands
 
@@ -58,7 +55,6 @@ cdk deploy
 - `cdk diff` &mdash; compare your stack against deployed version
 - `cdk destroy` &mdash; destroy the deployed stack
 
----
 
 ## Project Structure
 
@@ -67,14 +63,10 @@ cdk deploy
 - `lambda/janitor/handler.py` &mdash; Janitor Lambda code
 - `requirements.txt` &mdash; Python dependencies
 
----
 
 ## Notes
 - Lambda log retention is set to **6 months** to minimize costs.
 - The janitor is designed to fail safely in test environments.
 - Stack tagging is automatic via a shared `BaseStack` from [aws-cdk-tools](https://github.com/jjst/aws-cdk-tools).
 
----
-
-Enjoy clean AWS accounts and predictable cloud costs! ✨
 
